@@ -3,9 +3,9 @@ export const SITE_CONFIG = {
   title: 'Emirhan Cebiroğlu — Software Engineer',
   description: 'Software engineer building tools people actually use.',
   url: 'https://emirhancebiroglu.dev',
-  github: 'https://github.com/emirhan-cebiroglu',
+  github: 'https://github.com/emirhancebiroglu',
   linkedin: 'https://linkedin.com/in/emirhan-cebiroglu',
-  twitter: 'https://x.com/emirhancebi',
+  twitter: 'https://x.com/EmirhanCeb',
   email: 'hello@emirhancebiroglu.dev',
 } as const;
 

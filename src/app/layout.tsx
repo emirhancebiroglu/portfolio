@@ -57,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               url: 'https://emirhancebiroglu.dev',
               jobTitle: 'Software Engineer',
               sameAs: [
-                'https://github.com/emirhan-cebiroglu',
+                'https://github.com/emirhancebiroglu',
                 'https://linkedin.com/in/emirhan-cebiroglu',
               ],
             }),

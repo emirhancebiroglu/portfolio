@@ -6,7 +6,7 @@
 ## URLs
 - Production: https://emirhancebiroglu.dev
 - Vercel project: (fill in after Vercel setup)
-- GitHub repo: https://github.com/emirhan-cebiroglu/portfolio
+- GitHub repo: https://github.com/emirhancebiroglu/portfolio
 
 ## Accounts
 - Vercel: connected via GitHub
