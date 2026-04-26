@@ -3,6 +3,7 @@ import { inter, jetbrainsMono } from '@/lib/fonts';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { ThemeProvider } from '@/components/layout/theme-provider';
+import { PostHogProvider } from '@/components/layout/posthog-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -43,9 +44,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-screen bg-[var(--color-bg)] font-sans text-[var(--color-text-primary)] antialiased">
         <ThemeProvider>
-          <Header />
-          <main className="min-h-screen pt-16">{children}</main>
-          <Footer />
+          <PostHogProvider>
+            <Header />
+            <main className="min-h-screen pt-16">{children}</main>
+            <Footer />
+          </PostHogProvider>
         </ThemeProvider>
         <script
           type="application/ld+json"

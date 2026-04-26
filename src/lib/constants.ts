@@ -24,4 +24,13 @@ export type Project = {
   status: 'live' | 'building' | 'planned';
 };
 
-export const PROJECTS: Project[] = [];
+export const PROJECTS: Project[] = [
+  {
+    title: 'AI Task Breakdown',
+    description:
+      'Paste any overwhelming task, get concrete micro-steps you can start immediately. Powered by Llama 3.3 on Groq.',
+    href: '/tools/task-breakdown',
+    tags: ['AI', 'Groq', 'Next.js'],
+    status: 'live',
+  },
+];
