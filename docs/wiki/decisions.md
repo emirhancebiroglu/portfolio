@@ -74,3 +74,17 @@
 - **Reasoning:** The installed version of lucide-react has no brand icons (Github, Linkedin, Twitter exports do not exist). Adding a separate icon library (react-icons, simple-icons) for just 3 icons is unnecessary overhead. Inline SVGs are zero-dependency, tree-shakeable, and fully accessible via aria-label.
 - **Alternatives considered:** react-icons package (adds ~200KB), simple-icons (brand-only lib, another dep), switching lucide-react version (risks breaking other icons already in use)
 - **Status:** FINAL — do not revisit
+
+## DEC-009: Edge Runtime for OG Image Route
+- **Date:** 2026-04-26
+- **Decision:** Use `export const runtime = 'edge'` on the /og route
+- **Reasoning:** `@vercel/og` / `next/og` ImageResponse is designed for the edge runtime. It uses a WASM-based renderer that is incompatible with the Node.js runtime. Dynamic OG images for tool pages use ?title= and ?description= query params.
+- **Alternatives considered:** Static pre-generated images (no per-page customization), Node.js runtime (incompatible with ImageResponse)
+- **Status:** FINAL — do not revisit
+
+## DEC-010: next-sitemap for Sitemap Generation
+- **Date:** 2026-04-26
+- **Decision:** Use next-sitemap package with postbuild script instead of Next.js built-in sitemap
+- **Reasoning:** next-sitemap auto-generates both sitemap.xml and robots.txt in one step, configured via next-sitemap.config.js. Next.js built-in sitemap requires manual route enumeration in app/sitemap.ts.
+- **Alternatives considered:** app/sitemap.ts (more code, manual maintenance), no sitemap (bad for SEO)
+- **Status:** FINAL — do not revisit

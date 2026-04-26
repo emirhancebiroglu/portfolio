@@ -11,5 +11,5 @@ BUG-NNN | Status (OPEN/RESOLVED) | Description | Solution (if resolved)
 ## BUG-001 | RESOLVED
 **Description:** Build failed — `Github`, `Linkedin`, `Twitter` icons imported from lucide-react do not exist
 **Root Cause:** The version of lucide-react installed in this project does not export brand icons. The A-to-Z plan assumed they were available.
-**Solution:** Replaced icon imports with inline SVG path components defined directly in footer.tsx. No additional dependency needed.
+**Solution:** Replaced icon imports with inline SVG path components defined directly in footer.tsx and contact.tsx. No additional dependency needed.
 **Date resolved:** 2026-04-26
