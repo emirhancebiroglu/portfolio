@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npm --version)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(node -e \"const l = require\\('lucide-react'\\); console.log\\(Object.keys\\(l\\).filter\\(k => /git|linked|twitter|x$/i.test\\(k\\)\\).sort\\(\\)\\)\")",
+      "Bash(node -e \"const l = require\\('lucide-react'\\); console.log\\(Object.keys\\(l\\).filter\\(k => /^\\(Github|Linkedin|Twitter|X|Xtwitter|Instagram|ExternalLink|Link2\\)$/.test\\(k\\)\\)\\)\")"
     ]
   },
   "disabledMcpjsonServers": [
