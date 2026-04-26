@@ -88,3 +88,24 @@
 - **Reasoning:** next-sitemap auto-generates both sitemap.xml and robots.txt in one step, configured via next-sitemap.config.js. Next.js built-in sitemap requires manual route enumeration in app/sitemap.ts.
 - **Alternatives considered:** app/sitemap.ts (more code, manual maintenance), no sitemap (bad for SEO)
 - **Status:** FINAL — do not revisit
+
+## DEC-011: Groq + Llama 3.3 instead of Anthropic Claude for Task Breakdown
+- **Date:** 2026-04-26
+- **Decision:** Use Groq's `llama-3.3-70b-versatile` (via groq-sdk) for the AI Task Breakdown tool. Env var renamed to `GROQ_API_KEY`. The original A-to-Z plan specified Anthropic Claude.
+- **Reasoning:** User-driven decision. Groq offers extremely fast inference (~10x faster than typical Claude latency for this workload), generous free tier suitable for a free public tool, and competitive quality on structured task-breakdown outputs. The model choice is invisible to end users; latency is not.
+- **Alternatives considered:** Anthropic Claude Haiku (slower per-token, paid tier required earlier), OpenAI gpt-4o-mini (paid from request 1)
+- **Status:** FINAL — do not revisit (this tool only). If quality drops on harder tasks, revisit model choice rather than provider.
+
+## DEC-012: Few-Shot Prompting + JSON Mode + Banned-Phrase List for Task Breakdown Quality
+- **Date:** 2026-04-26
+- **Decision:** Use a 3-example few-shot system prompt, explicit banned-phrases list, Step 1 contract, and Groq's JSON mode (`response_format: { type: 'json_object' }`) to control output quality — instead of changing models or adding a multi-pass classifier.
+- **Reasoning:** Initial output was heavy on meta-planning ("make a list", "create a checklist", "categorize") instead of concrete first actions. Few-shot examples are the strongest single lever for fixed-model quality; named bans are followed more reliably than abstract style rules; JSON mode eliminates markdown-fence parsing hacks. Single-call, no added latency. Task-type classification and validation/retry loops were considered and deferred until we measure whether few-shot alone is sufficient.
+- **Alternatives considered:** (a) Switch to a stronger model — rejected per DEC-011 latency requirement; (b) Two-pass: classify task type, then type-specific prompt — 2x latency; (c) Validate output and retry on banned phrases — adds latency on bad outputs only, but added complexity
+- **Status:** FINAL for now — revisit only if T1 manual testing reveals quality is still insufficient
+
+## DEC-013: Tool Page Split — Server Component Wrapping Client Tool
+- **Date:** 2026-04-26
+- **Decision:** Tool pages are server components that export `metadata` and render a small `'use client'` child component that contains all interactivity. Pattern: `page.tsx` (server, metadata + h1 + FAQ) → `<ToolName>Tool.tsx` (client, useState/useRef/fetch).
+- **Reasoning:** Next.js App Router forbids `export const metadata` from `'use client'` files. Splitting keeps SEO metadata + static FAQ on the server while isolating client-only state. The pattern will be reused for Cron Builder and Schema Visualizer.
+- **Alternatives considered:** Generate metadata via `generateMetadata` from a server-only export — works but adds indirection; using metadata.json sibling files — not supported by App Router for dynamic content
+- **Status:** FINAL — applies to all three tools

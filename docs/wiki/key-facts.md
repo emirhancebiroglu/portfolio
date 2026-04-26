@@ -11,7 +11,7 @@
 ## Accounts
 - Vercel: connected via GitHub
 - PostHog project: "Emirhan Portfolio"
-- Anthropic API: pay-as-you-go, $10/month limit
+- Groq API: free tier (replaced Anthropic per DEC-011)
 - Domain registrar: (Cloudflare or Namecheap — fill in)
 
 ## Versions (as of Session 4)
@@ -28,9 +28,32 @@
 - Custom colors/fonts defined as CSS custom properties in @theme {}
 
 ## API Details
-- Claude model for task breakdown: claude-haiku-4-5-20251001
-- API key env var: ANTHROPIC_API_KEY (server-side only)
-- Rate limit: 20 requests/hour per IP (in-memory Map)
+- LLM provider: Groq (not Anthropic/Claude — see DEC-011)
+- Groq model for task breakdown: llama-3.3-70b-versatile
+- API key env var: GROQ_API_KEY (server-side only)
+- SDK: groq-sdk (npm)
+- Rate limit: 20 requests/hour per IP (in-memory Map, resets on cold start)
+- Output mode: JSON object (`response_format: { type: 'json_object' }`) — requires "json" appearing in system prompt
+- JSON envelope: `{ "steps": [...] }` (json_object mode requires object root, not array)
+- max_tokens: 1500
+- temperature: 0.4
+
+## Task Breakdown Tool Architecture (as of Session 5)
+- Page split: `src/app/tools/task-breakdown/page.tsx` (server, metadata + h1 + FAQ) wraps `src/components/tools/task-breakdown/TaskBreakdownTool.tsx` (client) — see DEC-013
+- TaskBreakdownTool uses discriminated-union state: idle | loading | results | error
+- 2-second submit debounce via `submittingRef` (not state) to avoid re-render churn
+- Focus-on-empty-error implemented via `registerFocus` callback pattern (parent calls child's exposed focus fn)
+- ⌘/Ctrl+Enter submits from textarea
+- PostHog events: task_breakdown_submitted (granularity), task_breakdown_completed (step_count, response_ms, granularity), task_breakdown_copied, task_breakdown_error (status)
+- Copy format: `Task: <task>\n\n1. <step>\n2. <step>...`
+- System prompt has 12 banned phrases + 3 few-shot examples — see DEC-012
+
+## PostHog Setup
+- Provider: src/components/layout/posthog-provider.tsx (client component)
+- Init: cookieless (`persistence: 'memory'`), autocapture off, capture_pageview off (manual)
+- Pageview capture: usePathname + useSearchParams in PostHogPageView, Suspense-wrapped (App Router requirement for useSearchParams)
+- Default api_host: https://us.i.posthog.com (overridable via NEXT_PUBLIC_POSTHOG_HOST)
+- No-ops silently when NEXT_PUBLIC_POSTHOG_KEY is unset
 
 ## OG Image Route
 - Path: /og (src/app/og/route.tsx)
@@ -67,10 +90,11 @@
 
 ## Dependencies (installed)
 - next-themes for dark/light toggle
-- @anthropic-ai/sdk for Claude API (installed, not yet used)
+- groq-sdk for LLM (Tool #1) — replaces Anthropic per DEC-011
+- @anthropic-ai/sdk (installed but unused — kept in case of future swap)
 - lucide-react for icons (NO brand icons — see note above)
 - clsx + tailwind-merge for cn() helper
-- posthog-js for analytics
+- posthog-js + posthog-js/react for analytics
 - next-mdx-remote + gray-matter + reading-time for content
 - date-fns for date formatting
 - @tailwindcss/typography (dev) for prose styles
