@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
+
+  --color-accent: #D4845A;
+  --color-accent-hover: #E09570;
+  --color-accent-subtle: rgba(212, 132, 90, 0.1);
+  --color-surface: #141415;
+  --color-surface-hover: #1C1C1E;
+  --color-border: #2A2A2D;
+
+  --width-content: 768px;
+  --width-wide: 1200px;
+}
+
+@layer base {
+  :root {
+    --color-bg: #FAFAF9;
+    --color-surface: #FFFFFF;
+    --color-surface-hover: #F5F5F4;
+    --color-border: #E5E5E3;
+    --color-text-primary: #1A1A1B;
+    --color-text-secondary: #6B6B70;
+    --color-accent: #C47348;
+    --color-accent-hover: #B5633A;
+    --color-accent-subtle: rgba(196, 115, 72, 0.08);
+  }
+
+  .dark {
+    --color-bg: #0A0A0B;
+    --color-surface: #141415;
+    --color-surface-hover: #1C1C1E;
+    --color-border: #2A2A2D;
+    --color-text-primary: #FAFAF9;
+    --color-text-secondary: #A1A1A6;
+    --color-accent: #D4845A;
+    --color-accent-hover: #E09570;
+    --color-accent-subtle: rgba(212, 132, 90, 0.1);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+  }
+}
