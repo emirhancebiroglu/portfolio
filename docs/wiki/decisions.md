@@ -44,6 +44,16 @@
   URLs, can't share or SEO-optimize individually)
 - **Status:** FINAL — do not revisit
 
+## DEC-005: PostHog over Google Analytics
+- **Date:** 2026-04-26
+- **Decision:** PostHog for all analytics (cookieless mode)
+- **Reasoning:** Same tool as Rudder — learn once. Open source.
+  Cookieless mode means no cookie banner needed. Better developer
+  UX than GA4. Free tier is generous (1M events/month).
+- **Alternatives considered:** Google Analytics 4 (requires cookie
+  consent, worse DX), Plausible (simpler but less flexible)
+- **Status:** FINAL — do not revisit
+
 ## DEC-006: Tailwind v4 CSS Config (no tailwind.config.ts)
 - **Date:** 2026-04-26
 - **Decision:** Keep Tailwind v4's CSS-based configuration in globals.css
@@ -58,12 +68,9 @@
 - **Alternatives considered:** Revert to .eslintrc.json (legacy, deprecated in ESLint 9+)
 - **Status:** FINAL — do not revisit
 
-## DEC-005: PostHog over Google Analytics
+## DEC-008: Inline SVG Brand Icons in Footer (no icon library for brands)
 - **Date:** 2026-04-26
-- **Decision:** PostHog for all analytics (cookieless mode)
-- **Reasoning:** Same tool as Rudder — learn once. Open source.
-  Cookieless mode means no cookie banner needed. Better developer
-  UX than GA4. Free tier is generous (1M events/month).
-- **Alternatives considered:** Google Analytics 4 (requires cookie
-  consent, worse DX), Plausible (simpler but less flexible)
+- **Decision:** Use inline SVG path components for GitHub, LinkedIn, X icons instead of a library
+- **Reasoning:** The installed version of lucide-react has no brand icons (Github, Linkedin, Twitter exports do not exist). Adding a separate icon library (react-icons, simple-icons) for just 3 icons is unnecessary overhead. Inline SVGs are zero-dependency, tree-shakeable, and fully accessible via aria-label.
+- **Alternatives considered:** react-icons package (adds ~200KB), simple-icons (brand-only lib, another dep), switching lucide-react version (risks breaking other icons already in use)
 - **Status:** FINAL — do not revisit

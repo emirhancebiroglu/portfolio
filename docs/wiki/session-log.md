@@ -3,6 +3,26 @@
 > Chronological record of every Claude Code work session.
 > Each entry captures what was done, what broke, and what's next.
 
+## Session 3 | 2026-04-26
+**Focus:** Section D (Directory Structure) + Section F (Foundation Layout)
+**Completed:**
+- Created full src/ directory tree: components/sections, components/layout, components/ui, components/tools (task-breakdown, cron-builder, schema-viz), hooks, types, app routes
+- Placeholder files for all components (hero, about, projects, contact, header, footer, theme-toggle, all UI components)
+- All app route pages: /tools, /tools/task-breakdown, /tools/cron-builder, /tools/schema-visualizer, /api/task-breakdown, /og, not-found.tsx
+- src/lib/constants.ts — SITE_CONFIG, NAV_ITEMS, PROJECTS array, Project type
+- src/lib/fonts.ts — Inter + JetBrains Mono exports (layout.tsx updated to import from here)
+- src/lib/posthog.ts — PostHog init stub
+- src/types/index.ts — re-exports Project type
+- ThemeProvider (next-themes, dark default)
+- ThemeToggle — Sun/Moon, hydration-safe (renders invisible div on SSR to avoid mismatch)
+- Header — fixed/sticky, backdrop-blur + border appears after 8px scroll, EC logo, desktop nav, ThemeToggle; mobile hamburger + slide-down drawer with Escape key, click-outside, and body scroll lock
+- Footer — inline SVG brand icons for GitHub, LinkedIn, X (no extra dependency)
+- layout.tsx rewired: ThemeProvider > Header > main (pt-16) > Footer
+- Build: 10/10 routes, 0 TypeScript errors
+**Issues:**
+- lucide-react in this project has no brand icons (Github, Linkedin, Twitter exports don't exist). Fixed by inlining SVG paths directly in footer.tsx. No dependency added.
+**Next session should:** Build Section G — real implementations of Button, Card, Badge, Input, Textarea, Tooltip components.
+
 ## Session 2 | 2026-04-26
 **Focus:** Section C — Codebase Initialization (C1–C8)
 **Completed:**

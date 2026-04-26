@@ -14,7 +14,7 @@
 - Anthropic API: pay-as-you-go, $10/month limit
 - Domain registrar: (Cloudflare or Namecheap — fill in)
 
-## Versions (as of Session 2)
+## Versions (as of Session 3)
 - Next.js: 16 (create-next-app@16.2.4 installed this — plan said 15)
 - Tailwind CSS: v4 (CSS-based config, NOT tailwind.config.ts)
 - Node.js: v24.14.0
@@ -38,10 +38,23 @@
 - Mono font: JetBrains Mono (variable — var --font-jetbrains)
 - Max content width: 768px (prose), 1200px (tools)
 
+## lucide-react Icon Notes
+- This version does NOT export brand icons: Github, Linkedin, Twitter do not exist
+- Available social-adjacent icons: ExternalLink, X (the letter X icon, not the brand)
+- Brand icons (GitHub, LinkedIn, X/Twitter) are implemented as inline SVG components in footer.tsx
+- Do NOT attempt to import Github/Linkedin/Twitter from lucide-react — build will fail
+
+## Component Architecture (as of Session 3)
+- fonts.ts owns font configuration — layout.tsx imports from there
+- ThemeProvider uses next-themes, attribute="class", defaultTheme="dark", enableSystem=false
+- ThemeToggle is hydration-safe: renders an invisible placeholder div during SSR
+- Header scroll detection threshold: 8px (window.scrollY > 8)
+- Main content has pt-16 to offset the fixed header height
+
 ## Dependencies (installed)
 - next-themes for dark/light toggle
 - @anthropic-ai/sdk for Claude API (installed, not yet used)
-- lucide-react for icons
+- lucide-react for icons (NO brand icons — see note above)
 - clsx + tailwind-merge for cn() helper
 - posthog-js for analytics
 - next-mdx-remote + gray-matter + reading-time for content
