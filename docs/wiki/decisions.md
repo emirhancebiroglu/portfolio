@@ -44,6 +44,20 @@
   URLs, can't share or SEO-optimize individually)
 - **Status:** FINAL — do not revisit
 
+## DEC-006: Tailwind v4 CSS Config (no tailwind.config.ts)
+- **Date:** 2026-04-26
+- **Decision:** Keep Tailwind v4's CSS-based configuration in globals.css
+- **Reasoning:** create-next-app@16 installed Tailwind v4 which uses @theme {} in CSS instead of tailwind.config.ts. Migrating back to v3 would be unnecessary churn. v4 config in globals.css achieves the same result — all design tokens (colors, fonts, max-widths) defined there.
+- **Alternatives considered:** Downgrade to Tailwind v3 + tailwind.config.ts (matches A-to-Z plan exactly, but adds no real value and risks breaking the installed deps)
+- **Status:** FINAL — do not revisit
+
+## DEC-007: ESLint Flat Config (eslint.config.mjs)
+- **Date:** 2026-04-26
+- **Decision:** Use ESLint flat config format (eslint.config.mjs) not legacy .eslintrc.json
+- **Reasoning:** create-next-app@16 generates flat config by default. The A-to-Z plan specified .eslintrc.json but that's the legacy format. Rules added to the flat config array produce identical linting behavior.
+- **Alternatives considered:** Revert to .eslintrc.json (legacy, deprecated in ESLint 9+)
+- **Status:** FINAL — do not revisit
+
 ## DEC-005: PostHog over Google Analytics
 - **Date:** 2026-04-26
 - **Decision:** PostHog for all analytics (cookieless mode)
