@@ -74,6 +74,14 @@
 - Brand icons (GitHub, LinkedIn, X/Twitter) are implemented as inline SVG components in footer.tsx and contact.tsx
 - Do NOT attempt to import Github/Linkedin/Twitter from lucide-react — build will fail
 
+## Cron Builder Architecture (as of Session 6)
+- Page split: `src/app/tools/cron-builder/page.tsx` (server, metadata + h1 + FAQ) wraps `CronBuilderTool.tsx` (client) — same DEC-013 pattern as Task Breakdown
+- `cron-utils.ts` is pure (no React) — all cron logic lives here, imported by both client components and tested independently
+- `CronFieldState` has 4 modes: every (*), everyN (*/N), specific (comma list), range (N-M)
+- Reverse parser auto-triggers when input has exactly 5 whitespace-separated tokens
+- `CronPreview` refreshes "now" every 30s via setInterval so relative labels ("in 3 hours") stay accurate
+- Nav anchor bug fix: NAV_ITEMS hrefs changed from `#about` to `/#about` (absolute) so they work from any route
+
 ## Component Architecture (as of Session 4)
 - fonts.ts owns font configuration — layout.tsx imports from there
 - ThemeProvider uses next-themes, attribute="class", defaultTheme="dark", enableSystem=false
@@ -100,5 +108,5 @@
 - @tailwindcss/typography (dev) for prose styles
 - prettier + prettier-plugin-tailwindcss (dev)
 - next-sitemap for sitemap + robots.txt generation
-- cron-parser for Tool #2 (not yet installed — add when building Tool #2)
+- cron-parser v5 (ESM) for Tool #2 — INSTALLED. API: `CronExpressionParser.parse(expr).next().toDate()`
 - reactflow + dagre for Tool #3 (not yet installed — add when building Tool #3)

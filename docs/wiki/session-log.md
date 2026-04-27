@@ -3,6 +3,28 @@
 > Chronological record of every Claude Code work session.
 > Each entry captures what was done, what broke, and what's next.
 
+## Session 6 | 2026-04-27
+**Focus:** Nav bug fix + Task Breakdown nonsense-input guard + Section U (Cron Expression Builder, full build)
+**Completed:**
+- BUG FIX: NAV_ITEMS in constants.ts changed from `#about`/`#projects`/`#contact` to `/#about`/`/#projects`/`/#contact` — bare anchors resolved to current route (e.g. `/tools#about`), so clicking About/Projects/Contact from any non-home page did nothing. Absolute anchors navigate home first then scroll.
+- BUG FIX: Task Breakdown nonsense-input guard — three-layer defence: (1) `looksLikeNonsense()` heuristic in route.ts catches keyboard-mash sequences (`asdf`, `qwert`, `hjkl`, etc.), single tokens with <20% vowel ratio, and repeated-char runs before any API call; (2) system prompt updated to return `{ "error": "..." }` JSON envelope when input is gibberish; (3) API parser forwards `parsed.error` as HTTP 400 — frontend already renders this correctly.
+- U1: Defined tool scope, user flow, and architecture
+- U2: User flow: 5 fields → live preview → description → next 10 runs + preset buttons + reverse parser
+- U3: `src/components/tools/cron-builder/cron-utils.ts` — pure utility module: `CronFieldState`/`CronFields` types, `defaultField`/`DEFAULT_FIELDS`, `fieldToString`, `buildCronExpression`, `parseFieldPart`, `parseCronExpression`, `validateExpression` (wraps cron-parser), `getNextExecutions`, `describeExpression` (custom plain-English describer with ordinals, AM/PM, range descriptions)
+- U4: `CronField.tsx` — single-field component with 4-mode tab strip (Every/Every N/Specific/Range); Specific mode shows a responsive clickable grid (10-col for minutes, 6-col for hours, named chips for months/DOW); all modes update parent state via onChange
+- U5: `CronPreview.tsx` — live preview panel: large monospace expression in accent color, copy button with 2s feedback, human-readable description, next 10 runs with absolute datetime + relative label (refreshes every 30s)
+- U6: Reverse parser wired into `CronBuilderTool.tsx` — text input auto-parses on every keystroke when 5 space-separated tokens are detected; invalid expressions show inline error
+- U7: `CronPresets.tsx` — 8 preset buttons (Every minute, Every hour, Daily at midnight, Weekdays at 9 AM, Every Sunday, First of month, Every 5 minutes, Twice daily)
+- U8: `src/app/tools/cron-builder/page.tsx` — server component with metadata, OG image params, h1, description, 4-question FAQ in `<details>` elements
+- U9: cron-parser npm installed; PROJECTS array updated with Cron Builder entry (status: live); 0 TypeScript errors; production build passes
+**Issues:**
+- cron-parser v5 uses ESM and exports `CronExpressionParser` (not the legacy `parseExpression` function). Discovered via quick node test before writing code — no downstream issues.
+**Next session should:**
+- O: Vercel deployment — push to main, set GROQ_API_KEY + NEXT_PUBLIC_POSTHOG_KEY in Vercel dashboard, verify both tools live
+- T1/T3: Manual quality testing of Task Breakdown (6 sample tasks) and Cron Builder on live URL
+- T4: Launch posts (LinkedIn, X, r/webdev, HN Show HN)
+- V: Schema Visualizer (Tool #3) — install reactflow + dagre, SQL parser, ERD renderer
+
 ## Session 5 | 2026-04-26
 **Focus:** Section N (PostHog) + Section Q (Task Breakdown planning) + Section R (API route, Groq) + Section S (UI/UX) + T2 (PROJECTS update) + Output quality optimization pass
 **Completed:**

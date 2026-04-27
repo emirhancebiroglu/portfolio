@@ -1,13 +1,13 @@
 # Portfolio — Project Progress
 
 ## Last Updated
-2026-04-26 | Session 5: PostHog (N), Task Breakdown Tool backend + frontend (Q–T2), Output quality optimization
+2026-04-27 | Session 6: Nav bug fix, nonsense-input guard (Task Breakdown), Cron Expression Builder (U1–U9)
 
 ## Current Phase
 Phase 1: Portfolio Build (Week 1-2) — wrapping up
 
 ## Current Focus
-Section T: Manual testing of Task Breakdown tool quality (T1) → Vercel deploy (O + T3)
+Section V: Schema Visualizer (Tool #3) — next up
 
 ## Completed Tasks
 - [x] Session 1: Project planning, roadmap, A-to-Z task plan
@@ -37,32 +37,41 @@ Section T: Manual testing of Task Breakdown tool quality (T1) → Vercel deploy 
 - [x] S8: SEO — h1 + meta description + 4-question FAQ section in <details> elements
 - [x] T2: PROJECTS array updated — AI Task Breakdown live entry
 - [x] Quality Optimization Pass: Rewrote SYSTEM_PROMPT with 3 few-shot examples, 12 banned phrases, Step 1 contract; switched to Groq JSON mode (response_format: json_object); strengthened user message with overwhelmed-user framing
+- [x] BUG FIX: Nav anchor links changed from `#about` to `/#about` — fixes broken scrolling when on non-home routes (/tools, /tools/task-breakdown, etc.)
+- [x] BUG FIX: Nonsense-input guard for Task Breakdown — looksLikeNonsense() heuristic (keyboard mash + vowel ratio + repeated chars) + LLM error envelope in system prompt + API forwards error as 400
+- [x] U1–U9: Cron Expression Builder — full build:
+  - cron-utils.ts: parseCronExpression, buildCronExpression, describeExpression, getNextExecutions, validateExpression
+  - CronField.tsx: 4-mode field (Every/Every N/Specific grid/Range) for all 5 cron positions
+  - CronPresets.tsx: 8 one-click preset buttons
+  - CronPreview.tsx: live expression display, plain-English description, next 10 runs with relative labels, copy button
+  - CronBuilderTool.tsx: main client state, reverse-parser input, responsive 2-col field grid
+  - page.tsx: server component, metadata, h1, 4-question FAQ
+  - PROJECTS array updated — Cron Builder live entry
+  - cron-parser npm package installed
 
 ## In Progress
-- [ ] T1: Manual testing of all 6 sample tasks at medium + high granularity (verify Step 1 contract holds, no banned phrases, estimatedMinutes always present)
+(nothing — U complete, V not yet started)
 
 ## Blocked
 (nothing currently blocked)
 
 ## Next Up
-- T1: Manual quality testing with the 6 sample tasks
-- O: Vercel Deployment — connect repo, set GROQ_API_KEY + NEXT_PUBLIC_POSTHOG_KEY env vars
-- T3: Live verification of /tools/task-breakdown
-- T4: Launch posts (LinkedIn, etc.)
-- U: Cron Expression Builder
-- V: Schema Visualizer
+- O: Vercel Deployment — connect repo, set GROQ_API_KEY + NEXT_PUBLIC_POSTHOG_KEY env vars, push to main
+- T1/T3: Manual quality testing of Task Breakdown + Cron Builder on live URL after deploy
+- T4: Launch posts (LinkedIn, X, etc.)
+- V: Schema Visualizer — Supabase/Postgres ERD generator (reactflow + dagre, SQL parser)
 
 ## Tool Status
 | Tool | Status | Section |
 |------|--------|---------|
-| AI Task Breakdown | Built (backend + frontend), pending T1 quality testing + deploy | Q–T |
-| Cron Expression Builder | Not started | U |
+| AI Task Breakdown | Built + nonsense guard, pending deploy | Q–T |
+| Cron Expression Builder | Built (U1–U9 complete), pending deploy | U |
 | Schema Visualizer | Not started | V |
 
 ## Key Metrics
 - Total tasks from A-Z plan: 140
-- Completed: ~70 (C1–C8, D1–D3+, F1–F7, G1–G6, H1–H2, I1–I2, J1–J3, K1, L1+, M1–M5, N, Q, R1–R4, S1–S8, T2 + quality optimization)
-- Remaining: ~70
+- Completed: ~85 (C1–C8, D1–D3+, F1–F7, G1–G6, H1–H2, I1–I2, J1–J3, K1, L1+, M1–M5, N, Q, R1–R4, S1–S8, T2, quality optimization, 2 bug fixes, U1–U9)
+- Remaining: ~55
 - Phase 1 target: Week 2
 - Phase 2 target: Week 10
 - Phase 3 target: Week 12

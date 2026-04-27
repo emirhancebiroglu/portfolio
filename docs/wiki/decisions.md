@@ -103,6 +103,20 @@
 - **Alternatives considered:** (a) Switch to a stronger model — rejected per DEC-011 latency requirement; (b) Two-pass: classify task type, then type-specific prompt — 2x latency; (c) Validate output and retry on banned phrases — adds latency on bad outputs only, but added complexity
 - **Status:** FINAL for now — revisit only if T1 manual testing reveals quality is still insufficient
 
+## DEC-014: cron-parser for Next Execution Times, Custom Describer for Human Text
+- **Date:** 2026-04-27
+- **Decision:** Use `cron-parser` npm package only for computing next execution times (`getNextExecutions`). Write the human-readable description (`describeExpression`) from scratch.
+- **Reasoning:** The A-to-Z plan noted existing libraries produce awkward English. Custom describer gives precise control over AM/PM formatting, ordinals, range phrasing ("Monday through Friday"), and edge cases (midnight/noon). cron-parser handles the complex scheduling math correctly with no reinventing needed.
+- **Alternatives considered:** cronstrue (human descriptions, awkward phrasing confirmed by testing), writing own scheduler (unnecessary complexity)
+- **Status:** FINAL
+
+## DEC-015: cron-parser v5 ESM API — CronExpressionParser.parse()
+- **Date:** 2026-04-27
+- **Decision:** Import `CronExpressionParser` from `cron-parser` and call `.parse(expr)` — NOT the legacy `parseExpression()` top-level export.
+- **Reasoning:** cron-parser v5 is ESM-only and changed its public API. The legacy `parseExpression` function no longer exists as a named export. Discovered via a quick node test before writing any component code.
+- **Alternatives considered:** Downgrade to cron-parser v4 (legacy API, CommonJS) — unnecessary churn
+- **Status:** FINAL — do not revisit
+
 ## DEC-013: Tool Page Split — Server Component Wrapping Client Tool
 - **Date:** 2026-04-26
 - **Decision:** Tool pages are server components that export `metadata` and render a small `'use client'` child component that contains all interactivity. Pattern: `page.tsx` (server, metadata + h1 + FAQ) → `<ToolName>Tool.tsx` (client, useState/useRef/fetch).
