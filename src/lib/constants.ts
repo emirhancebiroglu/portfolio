@@ -10,10 +10,10 @@ export const SITE_CONFIG = {
 } as const;
 
 export const NAV_ITEMS = [
-  { label: 'About', href: '#about' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'About', href: '/#about' },
+  { label: 'Projects', href: '/#projects' },
   { label: 'Tools', href: '/tools' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Contact', href: '/#contact' },
 ] as const;
 
 export type Project = {
@@ -31,6 +31,14 @@ export const PROJECTS: Project[] = [
       'Paste any overwhelming task, get concrete micro-steps you can start immediately. Powered by Llama 3.3 on Groq.',
     href: '/tools/task-breakdown',
     tags: ['AI', 'Groq', 'Next.js'],
+    status: 'live',
+  },
+  {
+    title: 'Cron Expression Builder',
+    description:
+      'Build any cron schedule visually. Pick values per field, see the expression live, get a plain-English description, and preview the next 10 run times.',
+    href: '/tools/cron-builder',
+    tags: ['Cron', 'DevTools', 'Next.js'],
     status: 'live',
   },
 ];

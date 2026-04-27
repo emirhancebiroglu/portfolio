@@ -29,6 +29,44 @@ const INJECTION_PATTERNS = [
   'jailbreak',
 ];
 
+const KEYBOARD_MASH_PATTERNS = [
+  'asdf',
+  'qwer',
+  'zxcv',
+  'hjkl',
+  'jkl;',
+  'qwerty',
+  'asdfgh',
+  'asdfghjkl',
+  'qwertyuiop',
+  '1234',
+];
+
+// Detects obvious gibberish (single nonsense token, keyboard mashing).
+// Tuned to avoid false positives on real multi-word tasks — the LLM does the
+// final judgment via its error envelope.
+function looksLikeNonsense(task: string): boolean {
+  const lower = task.toLowerCase();
+
+  if (KEYBOARD_MASH_PATTERNS.some((p) => lower.includes(p))) return true;
+
+  const tokens = task.split(/\s+/).filter(Boolean);
+
+  if (tokens.length === 1) {
+    const letters = lower.replace(/[^a-z]/g, '');
+    if (letters.length === 0) return true;
+    if (letters.length >= 4) {
+      const vowels = (letters.match(/[aeiouy]/g) ?? []).length;
+      if (vowels / letters.length < 0.2) return true;
+      // Detect repeated character runs (e.g., "aaaaa", "ababab")
+      if (/^(.)\1{3,}$/.test(letters)) return true;
+      if (/^(..)\1{2,}$/.test(letters)) return true;
+    }
+  }
+
+  return false;
+}
+
 type Granularity = 'low' | 'medium' | 'high';
 
 interface ValidatedInput {
@@ -64,6 +102,12 @@ const STEP_RANGE: Record<Granularity, string> = {
 
 const SYSTEM_PROMPT = `You are an expert task breakdown assistant for overwhelmed users.
 Your job: convert a vague or overwhelming task into concrete, immediately-actionable steps as JSON.
+
+NONSENSE / NON-TASK INPUT:
+If the user's input is gibberish, random characters (e.g., "asdfghjkl", "adfads"), a single made-up token with no meaning, or otherwise NOT a recognizable goal or intent in any language, you MUST respond with this JSON instead of steps:
+{ "error": "That doesn't look like a real task. Try describing what you want to accomplish in a sentence." }
+Do NOT invent creative steps for nonsense input. Do NOT try to be helpful when the input has no meaning.
+A real task must reference some recognizable activity, object, person, or goal.
 
 THE STEP 1 CONTRACT (most important rule):
 Step 1 MUST be a physical action the user can complete in under 5 minutes RIGHT NOW with zero preparation.
@@ -187,6 +231,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (looksLikeNonsense(input.task)) {
+    return NextResponse.json(
+      {
+        error:
+          "That doesn't look like a real task. Try describing what you want to accomplish in a sentence.",
+      },
+      { status: 400 },
+    );
+  }
+
   const userMessage = `The user feels overwhelmed and wants to START in the next 5 minutes.
 
 Their task: "${input.task}"
@@ -211,7 +265,11 @@ Return JSON only.`;
     });
 
     const text = completion.choices[0]?.message?.content ?? '';
-    const parsed = JSON.parse(text) as { steps?: unknown };
+    const parsed = JSON.parse(text) as { steps?: unknown; error?: unknown };
+
+    if (typeof parsed.error === 'string' && parsed.error.length > 0) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
+    }
 
     if (!parsed || !Array.isArray(parsed.steps)) {
       throw new Error('Model response missing steps array');
